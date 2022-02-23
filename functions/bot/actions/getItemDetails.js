@@ -1,3 +1,4 @@
 module.exports = (ctx) => {
- ctx.reply(ctx.message.text)
+ console.log( ctx.message );
+ return ctx.reply("TESTING");
 };
