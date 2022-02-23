@@ -1,10 +1,10 @@
 const Telegraf = require('telegraf');
-const orderAction = require('./actions/order');
+const itemAction = require('./actions/getItemDetails');
 
 const bot = new Telegraf(process.env.TELEGRAM_BOT_TOKEN);
 
-bot.command('order', (ctx) => {
-  return orderAction(ctx);
+bot.command('/item', (ctx) => {
+  return itemAction(ctx);
 });
 
 exports.handler = async (event) => {
