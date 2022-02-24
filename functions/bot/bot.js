@@ -11,9 +11,14 @@ bot.command("/item", (ctx) => {
 bot.on("inline_query", async ({ inlineQuery, answerInlineQuery }) => {
   const apiUrl = `http://recipepuppy.com/api/?q=${inlineQuery.query}`;
   console.log(`inline_query received ${inlineQuery.query}`);
-  items = []
-  for(var i = 0; i < 10; i++) {
-    items.push({ title: 'Item '+i, desc: 'item '+i+' desc', id: '0000'+i, moreinfo: 'More info about item'+i+', mucho importante information'})
+  items = [];
+  for (var i = 0; i < 10; i++) {
+    items.push({
+      title: "Item " + i,
+      desc: "item " + i + " desc",
+      id: "0000" + i,
+      moreinfo: "More info about item" + i + ", mucho importante information"
+    });
   }
   results = items.map((item) => ({
     type: "article",
@@ -21,23 +26,26 @@ bot.on("inline_query", async ({ inlineQuery, answerInlineQuery }) => {
     title: item.title,
     description: item.desc,
     input_message_content: {
-      message_text: '*'+item.title+'*\n'+item.desc,
-      parse_mode: 'Markdown'
+      message_text: "*" + item.title + "*\n" + item.desc,
+      parse_mode: "Markdown"
     },
     reply_markup: {
-        inline_keyboard: [
-          [{ text: 'More info', callback_data: 'moreinfo' }]
-    ]},
+      inline_keyboard: [[{ text: "More info", callback_data: "moreinfo" }]]
+    },
     hide_url: true,
-    url: 'http://www.domain.se/'+item.id,
-  }))
-  return answerInlineQuery(results, {is_personal: true, cache_time: 10})
+    url: "http://www.domain.se/" + item.id
+  }));
+  return answerInlineQuery(results, { is_personal: true, cache_time: 10 });
   return answerInlineQuery(recipes);
 });
 
 bot.on("chosen_inline_result", (ctx) => {
   console.log("chosen inline result", ctx.toString());
-  ctx.reply("update it!")
+  ctx.reply("update it!");
+});
+
+app.on("message", function (ctx, next) {
+  ctx.telegram.sendMessage("testig");
 });
 
 exports.handler = async (event) => {
