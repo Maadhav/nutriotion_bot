@@ -10,25 +10,28 @@ bot.command("/item", (ctx) => {
 
 bot.on("inline_query", async ({ inlineQuery, answerInlineQuery }) => {
   const apiUrl = `http://recipepuppy.com/api/?q=${inlineQuery.query}`;
-  console.log("inline_query received");
-  const response = await axios(apiUrl);
-  const { results } = await response.body;
-  const recipes = results
-    .filter(({ thumbnail }) => thumbnail)
-    .map(({ title, href, thumbnail }) => ({
-      type: "article",
-      id: thumbnail,
-      title: title,
-      description: title,
-      thumb_url: thumbnail,
-      input_message_content: {
-        message_text: title
-      },
-      reply_markup: Markup.inlineKeyboard([
-        Markup.urlButton("Go to recipe", href)
-      ])
-    }));
-    console.log(recipes);
+  console.log(`inline_query received ${inlineQuery.query}`);
+  items = []
+  for(var i = 0; i < 10; i++) {
+    items.push({ title: 'Item '+i, desc: 'item '+i+' desc', id: '0000'+i, moreinfo: 'More info about item'+i+', mucho importante information'})
+  }
+  results = items.map((item) => ({
+    type: "article",
+    id: item.id,
+    title: item.title,
+    description: item.desc,
+    input_message_content: {
+      message_text: '*'+item.title+'*\n'+item.desc,
+      parse_mode: 'Markdown'
+    },
+    reply_markup: {
+        inline_keyboard: [
+          [{ text: 'More info', callback_data: 'moreinfo' }]
+    ]},
+    hide_url: true,
+    url: 'http://www.domain.se/'+item.id,
+  }))
+  return answerInlineQuery(results, {is_personal: true, cache_time: 10})
   return answerInlineQuery(recipes);
 });
 
