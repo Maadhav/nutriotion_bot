@@ -9,39 +9,32 @@ bot.command("/item", (ctx) => {
 });
 
 bot.on("inline_query", async ({ inlineQuery, answerInlineQuery }) => {
-  const apiUrl = `http://recipepuppy.com/api/?q=${inlineQuery.query}`;
+  const items = await getSearchResults(inlineQuery.query);
   console.log(`inline_query received ${inlineQuery.query}`);
-  items = [];
-  for (var i = 0; i < 10; i++) {
-    items.push({
-      title: "Item " + i,
-      desc: "item " + i + " desc",
-      id: "0000" + i,
-      moreinfo: "More info about item" + i + ", mucho importante information"
-    });
-  }
-  results = items.map((item) => ({
+  const results = items.map((item) => ({
     type: "article",
-    id: item.id,
-    title: item.title,
-    description: item.desc,
+    id: item.beanId,
+    title: item.descForUi.replace(/<\/?[^>]+(>|$)/g, ""),
+    thumb_url: item.imageSrc,
     input_message_content: {
-      message_text: "*" + item.title + "*\n" + item.desc,
-      parse_mode: "Markdown"
+      message_text: item.descForUi,
+      parse_mode: "HTML"
     },
     reply_markup: {
       inline_keyboard: [[{ text: "More info", callback_data: "moreinfo" }]]
     },
-    hide_url: true,
-    url: "http://www.domain.se/" + item.id
+    hide_url: false,
+    url: "https://www.mynetdiary.com/" + item.openCatalogUrl
   }));
-  return answerInlineQuery(results, { is_personal: true, cache_time: 10 });
-  return answerInlineQuery(recipes);
+  return answerInlineQuery(results);
 });
 
-bot.on("chosen_inline_result", ({chosenInlineResult, from}) => {
+bot.on("chosen_inline_result", ({ chosenInlineResult, from }) => {
   console.log("chosen inline result ", chosenInlineResult);
-  bot.telegram.sendMessage(from.id, `chosen inline result ${chosenInlineResult}`);
+  bot.telegram.sendMessage(
+    from.id,
+    `chosen inline result ${chosenInlineResult}`
+  );
 });
 
 exports.handler = async (event) => {
@@ -56,25 +49,23 @@ exports.handler = async (event) => {
     };
   }
 };
-// getSearchResults({query: "milk"})
-// async function getSearchResults({ query }) {
-//   axios
-//     .post("https://www.mynetdiary.com/muiInstantFoodSearchFindFoods.do", {
-//       searchToken: query
-//     })
-//     .then(function (response) {
-//       console.log(response.data.entries);
-//     });
-// }
+getSearchResults({ query: "milk" });
+async function getSearchResults({ query }) {
+  return await axios
+    .post("https://www.mynetdiary.com/muiInstantFoodSearchFindFoods.do", {
+      searchToken: query
+    })
+    .then(function (response) {
+      return response.data.entries;
+    });
+}
 
-// async function getNutrientDetails({ url }) {
-//   return await axios
-//     .get("https://www.mynetdiary.com/" + url)
-//     .then(function (response) {
-//       const regex = new RegExp("(?<=injectedFoodLabel = ).*?(?=;)", "s");
-//       const str = response.data.toString();
-//       var arr = regex.exec(str);
-//       let data = JSON.parse(arr[0]);
-//       return data;
-//     });
-// }
+async function getNutrientDetails({ foodId }) {
+  return await axios
+    .get(
+      `https://www.mynetdiary.com/muiGetInstantFoodSearchFood.do?foodId=${foodId}`
+    )
+    .then(function (response) {
+      return response.data;
+    });
+}
