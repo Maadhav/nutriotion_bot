@@ -39,13 +39,9 @@ bot.on("inline_query", async ({ inlineQuery, answerInlineQuery }) => {
   return answerInlineQuery(recipes);
 });
 
-bot.on("chosen_inline_result", (ctx) => {
-  console.log("chosen inline result", ctx.toString());
-  bot.telegram.sendMessage("chosen inline result");
-});
-
-bot.on("message", function (ctx, next) {
-  bot.telegram.sendMessage("testig");
+bot.on("chosen_inline_result", ({chosenInlineResult, from}) => {
+  console.log("chosen inline result ", chosenInlineResult);
+  bot.telegram.sendMessage(from.id, `chosen inline result ${chosenInlineResult}`);
 });
 
 exports.handler = async (event) => {
