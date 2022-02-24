@@ -41,11 +41,11 @@ bot.on("inline_query", async ({ inlineQuery, answerInlineQuery }) => {
 
 bot.on("chosen_inline_result", (ctx) => {
   console.log("chosen inline result", ctx.toString());
-  bot.telegram.sendMessage(ctx.from.id, "chosen inline result");
+  bot.telegram.sendMessage("chosen inline result");
 });
 
 bot.on("message", function (ctx, next) {
-  ctx.telegram.sendMessage("testig");
+  bot.telegram.sendMessage("testig");
 });
 
 exports.handler = async (event) => {
