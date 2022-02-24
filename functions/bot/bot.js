@@ -17,8 +17,7 @@ bot.on("inline_query", async ({ inlineQuery, answerInlineQuery }) => {
     title: item.descForUi.replace(/<\/?[^>]+(>|$)/g, ""),
     thumb_url: item.imageSrc,
     input_message_content: {
-      message_text: item.descForUi,
-      parse_mode: "HTML"
+      message_text: item.descForUi.replace(/<\/?[^>]+(>|$)/g, ""),
     },
     reply_markup: {
       inline_keyboard: [[{ text: "More info", callback_data: "moreinfo" }]]
