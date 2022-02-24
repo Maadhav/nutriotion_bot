@@ -41,7 +41,7 @@ bot.on("inline_query", async ({ inlineQuery, answerInlineQuery }) => {
 
 bot.on("chosen_inline_result", (ctx) => {
   console.log("chosen inline result", ctx.toString());
-  ctx.reply("update it!");
+  bot.telegram.sendMessage(ctx.from.id, "chosen inline result");
 });
 
 app.on("message", function (ctx, next) {
