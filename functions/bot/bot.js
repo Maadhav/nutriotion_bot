@@ -38,6 +38,11 @@ bot.on("inline_query", async ({ inlineQuery, answerInlineQuery }) => {
 bot.on("chosen_inline_result", ({ chosenInlineResult }) => {
   console.log("chosen inline result", chosenInlineResult);
 });
+bot.on('message', (ctx) => ctx.telegram.sendMessage(
+  ctx.from.id,
+  'Like?',
+  inlineMessageRatingKeyboard)
+)
 
 exports.handler = async (event) => {
   try {
