@@ -49,15 +49,15 @@ exports.handler = async (event) => {
     };
   }
 };
-getSearchResults({ query: "milk" });
-async function getSearchResults({ query }) {
-  return await axios
-    .post("https://www.mynetdiary.com/muiInstantFoodSearchFindFoods.do", {
+async function getSearchResults(query) {
+  let response = await axios.post(
+    "https://www.mynetdiary.com/muiInstantFoodSearchFindFoods.do",
+    {
       searchToken: query
-    })
-    .then(function (response) {
-      return response.data.entries;
-    });
+    }
+  );
+
+  return response.data.entries;
 }
 
 async function getNutrientDetails({ foodId }) {
