@@ -10,6 +10,7 @@ bot.command("/item", (ctx) => {
 
 bot.on("inline_query", async ({ inlineQuery, answerInlineQuery }) => {
   const apiUrl = `http://recipepuppy.com/api/?q=${inlineQuery.query}`;
+  console.log("inline_query received");
   const response = await fetch(apiUrl);
   const { results } = await response.json();
   const recipes = results
@@ -27,6 +28,7 @@ bot.on("inline_query", async ({ inlineQuery, answerInlineQuery }) => {
         Markup.urlButton("Go to recipe", href)
       ])
     }));
+    console.log(recipes);
   return answerInlineQuery(recipes);
 });
 
