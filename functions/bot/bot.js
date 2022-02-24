@@ -35,14 +35,10 @@ bot.on("inline_query", async ({ inlineQuery, answerInlineQuery }) => {
   return answerInlineQuery(recipes);
 });
 
-bot.on("chosen_inline_result", ({ chosenInlineResult }) => {
-  console.log("chosen inline result", chosenInlineResult);
+bot.on("chosen_inline_result", (ctx) => {
+  console.log("chosen inline result", ctx.toString());
+  ctx.reply("update it!")
 });
-bot.on('message', (ctx) => ctx.telegram.sendMessage(
-  ctx.from.id,
-  'Like?',
-  inlineMessageRatingKeyboard)
-)
 
 exports.handler = async (event) => {
   try {
