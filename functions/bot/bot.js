@@ -1,7 +1,6 @@
 const Telegraf = require("telegraf");
 const itemAction = require("./actions/getItemDetails");
 const axios = require("axios").default;
-const fetch = require('node-fetch')
 
 const bot = new Telegraf(process.env.TELEGRAM_BOT_TOKEN);
 
