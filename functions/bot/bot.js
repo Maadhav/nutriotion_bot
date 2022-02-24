@@ -44,7 +44,7 @@ bot.on("chosen_inline_result", (ctx) => {
   bot.telegram.sendMessage(ctx.from.id, "chosen inline result");
 });
 
-app.on("message", function (ctx, next) {
+bot.on("message", function (ctx, next) {
   ctx.telegram.sendMessage("testig");
 });
 
